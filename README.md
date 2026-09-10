@@ -70,6 +70,20 @@ For a background systemd user service, stop the foreground server and run:
 
 The service runs while the user's systemd manager is active. Boot-time operation without a login also requires that user's lingering to be enabled. The service restarts if Tailscale's address is not available yet. Logs: `journalctl --user -u flipper-phone-relay`.
 
+## Agent skill
+
+[flipper-relay](skills/flipper-relay/SKILL.md) provides explicit tool discovery, the correct systemd user-service name, BLE/USB setup, and no-replay troubleshooting. Install the entire `skills/flipper-relay/` directory in your agent's skill directory, including `scripts/probe.py`. For Hermes use the intended profile's `skills/` directory; for OMP use `~/.omp/agent/skills/`. MCP configuration is still required separately.
+
+If an agent's current turn has no Flipper MCP tools, the skill includes a read-only fallback:
+
+```bash
+python3 skills/flipper-relay/scripts/probe.py status
+python3 skills/flipper-relay/scripts/probe.py device_info
+python3 skills/flipper-relay/scripts/probe.py power_info
+```
+
+The helper reads the saved configuration, performs one authenticated request, prints no credentials, and exits nonzero on failure. It never retries or replaces a failed device operation. A successful `status` can report `connected: false` when the relay is running but the phone is disconnected.
+
 ## Phone setup
 
 1. Install a debug APK built locally or downloaded from a successful [Build phone relay workflow run](https://github.com/crogers2287/frelay/actions/workflows/build.yml) (artifact `flipper-phone-relay-apk`). It is a signed debug build for testing.
