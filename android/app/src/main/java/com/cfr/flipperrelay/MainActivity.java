@@ -64,7 +64,7 @@ public final class MainActivity extends Activity {
         label(layout, "Connect your agent through this phone. Keep Tailscale connected on the phone and server.");
         SharedPreferences p = getSharedPreferences("relay", 0);
         label(layout, "Server URL"); url = new EditText(this); url.setSingleLine(); url.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
-        url.setHint("ws://100.x.x.x:8787/phone"); url.setText(p.getString("url", "")); layout.addView(url);
+        url.setHint("ws://100.x.x.x:9434/phone"); url.setText(p.getString("url", "")); layout.addView(url);
         label(layout, "Phone token"); token = new EditText(this); token.setSingleLine(); token.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         token.setText(p.getString("token", "")); layout.addView(token);
         label(layout, "Connection to Flipper"); mode = new Spinner(this);

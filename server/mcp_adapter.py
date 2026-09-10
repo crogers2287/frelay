@@ -11,7 +11,7 @@ mcp = FastMCP("Flipper Phone Relay")
 
 
 async def request(path, payload=None):
-    url = os.environ.get("FLIPPER_RELAY_URL", "http://127.0.0.1:8787").rstrip("/")
+    url = os.environ.get("FLIPPER_RELAY_URL", "http://127.0.0.1:9434").rstrip("/")
     token = os.environ["FLIPPER_AGENT_TOKEN"]
     async with httpx.AsyncClient(timeout=130, trust_env=False) as client:
         headers = {"Authorization": "Bearer " + token}

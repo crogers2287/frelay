@@ -17,7 +17,7 @@ The phone opens an outbound WebSocket to the server over Tailscale. The phone fo
 
 - Android 12 or later. USB needs USB-host support and a data-capable USB-C cable.
 - Flipper Zero in normal firmware mode, with BLE enabled for the wireless path or USB CDC available for the wired path. DFU/bootloader and USB HID modes are not the relay's serial transport.
-- Phone and server connected to the same Tailscale network; permit the phone to reach server TCP port 8787 in your tailnet policy.
+- Phone and server connected to the same Tailscale network; permit the phone to reach server TCP port 9434 in your tailnet policy.
 - Python 3.12 on the server, with `venv` support. The setup script detects the server's Tailscale IPv4 address.
 - A local-model agent that supports MCP. The model itself need not implement networking. Screen inspection additionally requires image-capable tool handling/model vision.
 
@@ -38,6 +38,15 @@ bash setup.sh
 ```
 
 Setup creates unique credentials in `~/.config/flipper-phone-relay/config.json` with owner-only file permissions. It prints the actual phone URL, phone token, and a ready-to-copy MCP configuration using absolute paths. The agent token remains in the configuration file instead of the printed MCP entry. Existing configuration is preserved on subsequent setup runs.
+
+Existing installations keep their saved port. To move an existing installation to port 9434 without changing either token, stop the server, run the following, and restart it:
+
+```bash
+.venv/bin/python manage.py set-port --port 9434
+.venv/bin/python manage.py run
+```
+
+For an installed systemd service, use `systemctl --user restart flipper-phone-relay` instead of `manage.py run`. Update the phone URL to the printed value, allow TCP 9434 in any applicable tailnet/firewall policy, and restart the agent's MCP process so it reloads the saved port. The existing APK accepts this port; reinstalling the app is unnecessary.
 
 To display the phone configuration again:
 
